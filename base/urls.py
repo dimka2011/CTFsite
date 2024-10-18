@@ -16,13 +16,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
-from stf.views import ProfilePage
+from stf.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('stf/', include('stf.urls')),
+    path('ctf/', include('stf.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('logout/', auth_views.LogoutView.as_view(template_name='registration/logout.html'), name='logout'),
     path('signup/', auth_views.LogoutView.as_view(template_name='registration/signup.html'), name='signup'),
-    path('accounts/profile/', ProfilePage.as_view(), name="profile")
+    path('accounts/profile/', ProfilePage.as_view(), name="profile"),
+    path('api/v1/task/', TaskAPIList.as_view()),
+    path('api/v1/task/<int:pk>/', TaskAPIUpdate.as_view()),
+    path('api/v1/user_wins/', UsersAPIView.as_view()),
+    path('api/v1/taskdetail/<int:pk>/', TaskAPIDetailView.as_view()),
     ]

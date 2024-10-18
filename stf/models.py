@@ -2,6 +2,12 @@ from django.db import models
 from django.utils import timezone
 
 
+class UserWins(models.Model):
+    user = models.OneToOneField('auth.User', on_delete=models.CASCADE)
+    user_wins = models.IntegerField()
+    def __str__(self):
+        return self.user
+
 class Category(models.Model):
     title = models.CharField(max_length=300)
     created_at = models.DateTimeField(default=timezone.now)

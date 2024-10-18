@@ -38,8 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'stf.apps.StfConfig',
-    'api.apps.ApiConfig',
-    'users'
+    'users',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -125,5 +125,12 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = '../../stf'
+LOGIN_REDIRECT_URL = '../../ctf'
 LOGOUT_REDIRECT_URL = ''
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ]
+}
