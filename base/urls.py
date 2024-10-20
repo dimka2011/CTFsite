@@ -13,10 +13,19 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
+
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
+
 from stf.views import *
+
+
+# router = routers.DefaultRouter()
+# router.register(r'task', TaskViewSet)
+# router.register(r'user_wins', UsersViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,8 +34,11 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(template_name='registration/logout.html'), name='logout'),
     path('signup/', auth_views.LogoutView.as_view(template_name='registration/signup.html'), name='signup'),
     path('accounts/profile/', ProfilePage.as_view(), name="profile"),
+    # path('api/v1/', include(router.urls)),
     path('api/v1/task/', TaskAPIList.as_view()),
     path('api/v1/task/<int:pk>/', TaskAPIUpdate.as_view()),
-    path('api/v1/user_wins/', UsersAPIView.as_view()),
-    path('api/v1/taskdetail/<int:pk>/', TaskAPIDetailView.as_view()),
+    path('api/v1/taskdelete/<int:pk>/', TaskAPIDestroy.as_view()),
+    path('api/v1/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/v1/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     ]

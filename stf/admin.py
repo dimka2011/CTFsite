@@ -4,4 +4,6 @@ from . import models
 
 admin.site.register(models.Category)
 admin.site.register(models.Task)
-admin.site.register(models.UserWins)
+admin.site.register(models.Ip)
+
+# admin.site.register(models.UserWins)

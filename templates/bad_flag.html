@@ -8,13 +8,10 @@
 <h3>Category: {{ task.category }}</h3>
 <p> Description: {{ task.describtion}} </p>
 {% if user.is_authenticated %}
-<form action='flag/'>
-    {{ form.as_p }}
-    <input type="submit" value="Submit">
-</form>
+    <a href="../.">Try again</a>
 {% else %}
 <p>Login or Signup to solve this task</p>
 <a href="{% url 'login' %}", class="nav-link">Login</a>
-<a href="{% url "CTF:signup" %}" class="nav-link" >Sign Up</a>
+<a href="{% url 'CTF:signup' %}" class="nav-link" >Sign Up</a>
 {% endif %}
 {% endblock content %}

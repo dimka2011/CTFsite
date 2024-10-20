@@ -1,38 +1,59 @@
+from django.contrib.auth.models import User
+from django.db.models import F
 from django.forms import model_to_dict
 from django.shortcuts import render
 from django.http import HttpResponse, Http404, HttpResponseRedirect
+from rest_framework.decorators import action
+from rest_framework.exceptions import ValidationError
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
 from . import models
-from .models import UserWins, Task
+from .models import Task, Category, Ip
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView
-from .forms import UserRegisterForm
-from rest_framework import generics
-
+from .forms import UserRegisterForm, FlagForm
+from rest_framework import generics, viewsets
+import asyncio
 from .serializers import TaskSerializer
+from django import forms
+from django.contrib import auth
 
 
-class UsersAPIView(APIView):
-    def get(self, request):
-        return Response({'title': 'Your first task'})
+# class UsersViewSet(viewsets.ModelViewSet):
+#     queryset = UserWins.objects.all()
+#     serializer_class = UserSerializer
 
+
+# class TaskViewSet(viewsets.ModelViewSet):
+#     queryset = Task.objects.all()
+#     serializer_class = TaskSerializer
+#
+#
+#     @action(methods=['get'], detail=True)
+#     def category(self, request, pk=None):
+#         cats = Category.objects.get(pk=pk)
+#         return Response({'cats': cats.title})
 
 class TaskAPIList(generics.ListCreateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly, )
 
-class TaskAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
+
+class TaskAPIUpdate(generics.RetrieveUpdateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    permission_classes = (IsOwnerOrReadOnly, )
 
 
-class TaskAPIUpdate(generics.UpdateAPIView):
+class TaskAPIDestroy(generics.RetrieveDestroyAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    permission_classes = (IsAdminOrReadOnly,)
 
 
 # class TaskAPIView(APIView):
@@ -95,9 +116,42 @@ def index(request):
     tasks = models.Task.objects.all()
     return render(request, 'tasks.html', {'tasks': tasks})
 
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR') # В REMOTE_ADDR значение айпи пользователя
+    return ip
+
+
 def single_task(request, task_id):
     try:
         task = models.Task.objects.get(pk=task_id)
-        return render(request, 'single_task.html', {'task': task})
+        ip = get_client_ip(request)
+        if Ip.objects.filter(ip=ip).exists():
+            task.views.add(Ip.objects.get(ip=ip))
+        else:
+            Ip.objects.create(ip=ip)
+            task.views.add(Ip.objects.get(ip=ip))
+
+        context = {
+            'task': task,
+            'form': FlagForm,
+        }
+        return render(request, 'single_task.html', context)
     except models.Task.DoesNotExist:
         raise Http404()
+
+
+def flagform(request, task_id):
+    if request.method == 'GET':
+        TaskObj = Task.objects.get(id=task_id)
+        print(request.GET.get('user_flag'))
+        print(TaskObj)
+        if TaskObj.flag == request.GET.get('user_flag'):
+            user = User.objects.filter(id=request.user.id).update(user_wins = F("user_wins") + 1)
+            return render(request, 'good_flag.html')
+        else:
+            return render(request, 'bad_flag.html')

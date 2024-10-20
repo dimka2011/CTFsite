@@ -1,6 +1,19 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+from django import forms
+
+from stf.models import Task
+
+
+class FlagForm(forms.Form):
+  user_flag = forms.CharField(label='Flag', max_length=100)
+  def clean(self):
+      user_flag = super().clean().get('user_flag')
+      flag = Task.objects.get('flag')
+      print("good")
+      if user_flag != flag:
+          raise forms.ValidationError("Try again")
 
 
 class UserRegisterForm(UserCreationForm):

@@ -4,6 +4,7 @@ from . import views
 app_name = 'CTF'
 urlpatterns = [
     path('', views.index, name='index'),
-    path('<int:task_id>', views.single_task, name='single_task'),
-    path("signup/", views.UserRegisterView.as_view(), name='signup')
+    path('<int:task_id>/', views.single_task, name='single_task'),
+    path("signup/", views.UserRegisterView.as_view(), name='signup'),
+    path('<int:task_id>/flag/', views.flagform, name='flag')
     ]

@@ -1,16 +1,20 @@
 from rest_framework import serializers
 from rest_framework.renderers import JSONRenderer
 
-from .models import UserWins, Task
+from .models import Task
 
 
 class TaskSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    views = serializers.HiddenField(default=0)
     class Meta:
         model = Task
-        fields = ("title", "describtion", "flag", "category", "reviews_qty")
+        fields = ("__all__")
 
-
-
+# class UserSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = UserWins
+#         fields = ('user_id', 'user_wins')
 
     # title = serializers.CharField(max_length=100)
     # describtion = serializers.CharField(max_length=1000)

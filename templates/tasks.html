@@ -16,7 +16,7 @@
         <tr>
             <td><a href= {% url "CTF:single_task" task.id %}>{{ task.title }}</a></td>
             <td>{{ task.category }}</td>
-            <td><a href="{% url "CTF:single_task" task.id %}"><button class="btn btn-primary">Solve</button></a></td>
+            <td><a href="{% url 'CTF:single_task' task.id %}"><button class="btn btn-primary">Solve</button></a></td>
         </tr>
         {% endfor %}
     </tbody>

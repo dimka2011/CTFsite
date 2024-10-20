@@ -4,24 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b90f2bf6-9b5d-4a3c-94e0-902fdff63806" name="Changes" comment="q">
-      <change beforePath="$PROJECT_DIR$/.idea/CTFSite.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/CTFSite.iml" afterDir="false" />
+    <list default="true" id="b90f2bf6-9b5d-4a3c-94e0-902fdff63806" name="Changes" comment="requirements.txt + README.txt added">
+      <change afterPath="$PROJECT_DIR$/stf/migrations/0006_delete_userwins.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stf/migrations/0007_task_user.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stf/migrations/0008_ip_remove_task_reviews_qty_alter_task_created_at_and_more.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stf/permissions.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/bad_flag.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/good_flag.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/stf/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/admin.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/apps.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/migrations/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/models.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/tests.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/views.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.txt" beforeDir="false" afterPath="$PROJECT_DIR$/README.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/base/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/base/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/base/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/base/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/stf/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/stf/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stf/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/stf/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/stf/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/stf/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stf/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/stf/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stf/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/stf/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/stf/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/stf/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/registration/logout.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/registration/logout.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/flag.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/registration/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/registration/profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/single_task.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/single_task.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/tasks.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tasks.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,8 +35,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="Python Script" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -55,32 +59,36 @@
   &quot;associatedIndex&quot;: 3
 }</component>
   <component name="ProjectId" id="2nGCXAOKYpNI79FJyytDUWWb1OA" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "Python.manage.executor": "Run",
-    "Python.models.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "E:/Программирование/CTFsite",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Python.forms.executor&quot;: &quot;Run&quot;,
+    &quot;Python.manage.executor&quot;: &quot;Run&quot;,
+    &quot;Python.models.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/Программирование/CTFsite&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.intellij.pycharm.community.ide.impl.configuration.PythonContentEntriesConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "ChangesTree.GroupingKeys": []
+  &quot;keyToStringList&quot;: {
+    &quot;ChangesTree.GroupingKeys&quot;: []
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -101,6 +109,23 @@
       <workItem from="1729197504492" duration="1143000" />
       <workItem from="1729274163433" duration="390000" />
     </task>
+    <task id="LOCAL-00001" summary="Added API">
+      <option name="closed" value="true" />
+      <created>1729288074636</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1729288074636</updated>
+    </task>
+    <task id="LOCAL-00002" summary="requirements.txt + README.txt added">
+      <option name="closed" value="true" />
+      <created>1729326634301</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1729326634301</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -122,5 +147,11 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="Added API" />
+    <MESSAGE value="requirements.txt + README.txt added" />
+    <option name="LAST_COMMIT_MESSAGE" value="requirements.txt + README.txt added" />
   </component>
 </project>
