@@ -18,7 +18,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 
 from stf.views import *
 
@@ -38,7 +37,5 @@ urlpatterns = [
     path('api/v1/task/', TaskAPIList.as_view()),
     path('api/v1/task/<int:pk>/', TaskAPIUpdate.as_view()),
     path('api/v1/taskdelete/<int:pk>/', TaskAPIDestroy.as_view()),
-    path('api/v1/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/v1/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     ]
