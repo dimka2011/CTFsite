@@ -33,7 +33,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('logout/', auth_views.LogoutView.as_view(template_name='registration/logout.html'), name='logout'),
     path('signup/', auth_views.LogoutView.as_view(template_name='registration/signup.html'), name='signup'),
-    path('accounts/profile/', ProfilePage.as_view(), name="profile"),
+    path('accounts/profile/', update_profile, name="profile"),
     # path('api/v1/', include(router.urls)),
     path('api/v1/task/', TaskAPIList.as_view()),
     path('api/v1/task/<int:pk>/', TaskAPIUpdate.as_view()),

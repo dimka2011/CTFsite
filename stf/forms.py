@@ -1,9 +1,14 @@
+import django.contrib.auth.models
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django import forms
-
-from stf.models import Task
+from django.forms import DateInput
+from django_countries import fields
+from stf.models import Task, Profile
+from django_countries.fields import CountryField
+from django_countries import countries
+from . import models
 
 
 class FlagForm(forms.Form):
@@ -47,3 +52,31 @@ class UserRegisterForm(UserCreationForm):
             self.fields['password1'].widget.attrs.update({"placeholder": 'Придумайте свой пароль'})
             self.fields['password2'].widget.attrs.update({"placeholder": 'Повторите придуманный пароль'})
             self.fields[field].widget.attrs.update({"class": "form-control", "autocomplete": "off"})
+
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email')
+
+
+class ProfileForm(forms.ModelForm):
+    location = CountryField().formfield(required=False)
+    birth_date = forms.DateField(widget=DateInput(attrs={'type': 'date'}), required=False)
+
+    class Meta:
+        model = Profile
+        fields = ('location', 'birth_date')
+
+
+class TaskForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        user_id = User.pk
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control', 'autofocus': ''})
+    class Meta:
+        model = Task
+        fields = ('title', 'describtion', 'flag', 'category', 'file')
+

@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Лидеры</h1>
+{% for winner in list %}
+<p>{{winner}}</p>
+{% endfor %}
+{% endblock %}

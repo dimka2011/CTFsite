@@ -1,13 +1,29 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils import timezone
 
 
-# class UserWins(models.Model):
-#     userid = models.ForeignKey(User.id, verbose_name='username', on_delete=models.CASCADE)
-#     user_wins = models.IntegerField(default=0)
-#     def __str__(self):
-#         return self.user
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    solved_tasks = models.CharField(max_length=10000000, default='0')
+    user_wins = models.IntegerField(default=0)
+    bio = models.TextField(max_length=500, blank=True)
+    location = models.CharField(max_length=30, blank=True)
+    birth_date = models.DateField(null=True, blank=True)
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
+
 
 class Category(models.Model):
     title = models.CharField(max_length=300)
@@ -15,6 +31,7 @@ class Category(models.Model):
 
     def __str__(self):
         return self.title
+
 
 class Ip(models.Model): # наша таблица где будут айпи адреса
     ip = models.CharField(max_length=100)
@@ -29,7 +46,8 @@ class Task(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     flag = models.CharField(max_length=150)
     describtion = models.CharField(max_length=1000)
-    user = models.ForeignKey(User, verbose_name='User', on_delete=models.CASCADE)
+    file = models.FileField(upload_to="files/", null=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
 
     def __str__(self):
         return self.title
