@@ -37,5 +37,4 @@ urlpatterns = [
     path('api/v1/task/', TaskAPIList.as_view()),
     path('api/v1/task/<int:pk>/', TaskAPIUpdate.as_view()),
     path('api/v1/taskdelete/<int:pk>/', TaskAPIDestroy.as_view()),
-    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     ]
