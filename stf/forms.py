@@ -64,6 +64,16 @@ class ProfileForm(forms.ModelForm):
     location = CountryField().formfield(required=False)
     birth_date = forms.DateField(widget=DateInput(attrs={'type': 'date'}), required=False)
 
+    def clean_email(self):
+        """
+        Проверка email на уникальность
+        """
+        email = self.cleaned_data.get('email')
+        username = self.cleaned_data.get('username')
+        if email and User.objects.filter(email=email).exclude(username=username).exists():
+            raise ValidationError('Такой email уже используется в системе')
+        return email
+
     class Meta:
         model = Profile
         fields = ('location', 'birth_date')
