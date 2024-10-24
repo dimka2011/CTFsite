@@ -74,9 +74,11 @@ class TaskForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         user_id = User.pk
         super().__init__(*args, **kwargs)
+        self.fields['file'].required = False
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control', 'autofocus': ''})
     class Meta:
         model = Task
+        file = forms.FileField(required=False)
         fields = ('title', 'describtion', 'flag', 'category', 'file')
 

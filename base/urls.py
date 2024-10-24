@@ -28,7 +28,7 @@ from stf.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('ctf/', include('stf.urls')),
+    path('', include('stf.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('logout/', auth_views.LogoutView.as_view(template_name='registration/logout.html'), name='logout'),
     path('signup/', auth_views.LogoutView.as_view(template_name='registration/signup.html'), name='signup'),
