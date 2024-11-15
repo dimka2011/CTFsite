@@ -48,7 +48,6 @@ from django.views.generic import CreateView
 class TaskAPIList(generics.ListCreateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly, )
 
 
 class TaskAPIUpdate(generics.RetrieveUpdateAPIView):

@@ -19,6 +19,9 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 
+from stf.views import *
+
+
 # router = routers.DefaultRouter()
 # router.register(r'task', TaskViewSet)
 # router.register(r'user_wins', UsersViewSet)

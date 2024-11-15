@@ -1,10 +1,14 @@
+import django.contrib.auth.models
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django import forms
 from django.forms import DateInput
-from backend.stf.models import Task, Profile
+from django_countries import fields
+from stf.models import Task, Profile
 from django_countries.fields import CountryField
+from django_countries import countries
+from . import models
 
 
 class FlagForm(forms.Form):
