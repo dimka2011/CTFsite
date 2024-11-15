@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<table class="table mt-5 table-bordered table-striped table-hower">
+    <thead class="table-dark">
+        <tr>
+            <th>Title</th>
+            <th>Category</th>
+            <th></th>
+        </tr>
+
+     </thead>
+    <tbody>
+        {% for task in tasks %}
+        <tr>
+            <td><a href= {% url "CTF:single_task" task.id %}>{{ task.title }}</a></td>
+            <td>{{ task.category }}</td>
+            {% if task.id in solved_tasks %}
+            <td><a href="{% url 'CTF:single_task' task.id %}"><button class="btn btn-success">Solved</button></a></td>
+            {% else %}
+            <td><a href="{% url 'CTF:single_task' task.id %}"><button class="btn btn-primary">Solve</button></a></td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{{api_tasks}}
+{% endblock %}
+
+{% block head %}
+
+<title>Tasks</title>
+{% endblock head %}

@@ -1,0 +1,22 @@
+
+{% extends "base.html" %}
+{% block content %}
+{% if user.is_authenticated && task_id in solved_tasks%}
+<h1>Название: {{ task.title }}</h1>
+<h3>Категория: {{ task.category }}</h3>
+<p> Описание: {{ task.describtion}} </p>
+<p> Файл: <a href="file/">Скачать</a> </p>
+<p> Просмотров: {{ task.views }}</p>
+<h4>Вы уже выполнили это задание</h4>
+<h5><a href="../">Искать другое задание</a></h5>
+{% else %}
+<h1>Название: {{ task.title }}</h1>
+<h3>Категория: {{ task.category }}</h3>
+<p> Описание: {{ task.describtion}} </p>
+<p> Файл: <a href="file/">Скачать</a> </p>
+<p> Просмотров: {{ views }}</p>
+<p>Войдите или зарегистрируйтесь чтобы выполнить это задание</p>
+<h4 class='item'><a href="{% url login %}" class="btn btn-primary stretched-link">Войти</a><br>
+<a href="{% url 'CTF:signup' %}" class="btn btn-primary stretched-link" >Зарегистрироваться</a></h4>
+{% endif %}
+{% endblock content %}
