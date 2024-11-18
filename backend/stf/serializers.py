@@ -1,7 +1,12 @@
 from rest_framework import serializers
 from rest_framework.renderers import JSONRenderer
-
+from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.settings import api_settings
+from django.contrib.auth.models import update_last_login
+from django.core.exceptions import ObjectDoesNotExist
 from .models import Task
+from django.contrib.auth.models import User
 
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -11,57 +16,39 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = ("__all__")
 
-# class UserSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = UserWins
-#         fields = ('user_id', 'user_wins')
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("__all__")
+        
+class LoginSerializer(TokenObtainPairSerializer):
 
-    # title = serializers.CharField(max_length=100)
-    # describtion = serializers.CharField(max_length=1000)
-    # flag = serializers.CharField(max_length=100)
-    # created_at = serializers.DateTimeField(read_only=True)
-    # category_id = serializers.IntegerField()
-    # reviews_qty = serializers.IntegerField()
-    #
-    # def create(self, validated_data):
-    #     return Task.objects.create(**validated_data)
-    #
-    # def update(self, instance, validated_data):
-    #     instance.title = validated_data.get("title", instance.title)
-    #     instance.flag = validated_data.get("flag", instance.flag)
-    #     instance.describtion = validated_data.get("describtion", instance.describtion)
-    #     instance.save()
-    #     return instance
+    def validate(self, attrs):
+        data = super().validate(attrs)
 
+        refresh = self.get_token(self.user)
+
+        data['user'] = UserSerializer(self.user).data
+        data['refresh'] = str(refresh)
+        data['access'] = str(refresh.access_token)
+
+        if api_settings.UPDATE_LAST_LOGIN:
+            update_last_login(None, self.user)
+
+        return data
 
 
+class RegisterSerializer(UserSerializer):
+    password = serializers.CharField(max_length=128, min_length=8, write_only=True, required=True)
+    email = serializers.EmailField(required=True, write_only=True, max_length=128)
 
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'password', 'is_active']
 
-
-
-# class TaskModel:
-#     def __init__(self, title, flag, describtion):
-#         self.title = title
-#         self.flag = flag
-#         self.describtion = describtion
-
-
-# class UserSerializer(serializers.ModelSerializer):
-#     title = serializers.CharField(max_length=100)
-#     flag = serializers.CharField(max_length=255)
-#     describtions = serializers.CharField(max_length=1000)
-#
-#
-#
-# class TaskSerializer(serializers.Serializer):
-#     title = serializers.CharField(max_length=100)
-#     flag = serializers.CharField(max_length=255)
-#     describtion = serializers.CharField(max_length=1000)
-#
-# def encode():
-#     model = TaskModel("Your first CTF task", "You win!", "You")
-#     model_sr = TaskSerializer(model)
-#     print(model_sr.data, type(model_sr.data), sep='\n')
-#     json = JSONRenderer().render(model_sr.data)
-#     print(json)
-
+    def create(self, validated_data):
+        try:
+            user = User.objects.get(email=validated_data['email'])
+        except ObjectDoesNotExist:
+            user = User.objects.create_user(**validated_data)
+        return user

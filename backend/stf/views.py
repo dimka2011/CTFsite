@@ -24,25 +24,40 @@ from .forms import UserRegisterForm, FlagForm, ProfileForm, UserForm
 from rest_framework import generics, viewsets
 import asyncio
 from .forms import TaskForm
-from .serializers import TaskSerializer
+from .serializers import TaskSerializer, UserSerializer, LoginSerializer, RegisterSerializer
 from django import forms
 from django.urls import reverse
 from django.contrib import auth
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.views.generic import CreateView
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import filters
+from rest_framework.response import Response
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import AllowAny
+from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 
+class UserViewSet(viewsets.ModelViewSet):
+    http_method_names = ['get']
+    serializer_class = UserSerializer
+    permission_classes = (IsAuthenticated,)
+    filter_backends = [filters.OrderingFilter]
 
-# def get_data_from_api():
-#     url = 'http://api/v1/task/'
-#     response = requests.get(url)
-#     if response.status_code == 200:
-#         data = response.json()
-#         return data
-#     else:
-#         return None
-#
-#
-# api_data = get_data_from_api()
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return User.objects.all()
+
+    def get_object(self):
+        lookup_field_value = self.kwargs[self.lookup_field]
+
+        obj = User.objects.get(lookup_field_value)
+        self.check_object_permissions(self.request, obj)
+
+        return obj
 
 
 class TaskAPIList(generics.ListCreateAPIView):
@@ -62,36 +77,58 @@ class TaskAPIDestroy(generics.RetrieveDestroyAPIView):
     permission_classes = (IsAdminOrReadOnly,)
 
 
-# class TaskAPIView(APIView):
-#
-#     def get(self, request):
-#         t = Task.objects.all().values()
-#         return Response({'tasks': TaskSerializer(t, many=True).data})
-#     def post(self, request):
-#         serializer = TaskSerializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         serializer.save()
-#         # post_new = Task.objects.create(
-#         #     title=request.data['title'],
-#         #     flag=request.data['flag'],
-#         #     describtion=request.data['title'],
-#         #     reviews_qty=request.data['reviews_qty'],
-#         #     category_id=request.data['category_id'],
-#         # )
-#
-#         return Response({'post': serializer.data})
-#     def put(self, request, *args, **kwargs):
-#         pk = kwargs.get("pk", None)
-#         if not pk:
-#             return Response({"error": "Method PUT not allowed"})
-#         try:
-#             instance = Task.objects.get(pk=pk)
-#         except:
-#             return Response({"error": "Object does not exists"})
-#         serializer = TaskSerializer(data=request.data, instance=instance)
-#         serializer.is_valid(raise_exception=True)
-#         serializer.save()
-#         return Response({"post": serializer.data})
+class LoginViewSet(ModelViewSet, TokenObtainPairView):
+    serializer_class = LoginSerializer
+    permission_classes = (AllowAny,)
+    http_method_names = ['post']
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+        except TokenError as e:
+            raise InvalidToken(e.args[0])
+
+        return Response(serializer.validated_data, status=status.HTTP_200_OK)
+
+
+class RegistrationViewSet(ModelViewSet, TokenObtainPairView):
+    serializer_class = RegisterSerializer
+    permission_classes = (AllowAny,)
+    http_method_names = ['post']
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        refresh = RefreshToken.for_user(user)
+        res = {
+            "refresh": str(refresh),
+            "access": str(refresh.access_token),
+        }
+
+        return Response({
+            "user": serializer.data,
+            "refresh": res["refresh"],
+            "token": res["access"]
+        }, status=status.HTTP_201_CREATED)
+
+
+class RefreshViewSet(viewsets.ViewSet, TokenRefreshView):
+    permission_classes = (AllowAny,)
+    http_method_names = ['post']
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+        except TokenError as e:
+            raise InvalidToken(e.args[0])
+
+        return Response(serializer.validated_data, status=status.HTTP_200_OK)
 
 
 class UserRegisterView(CreateView):
