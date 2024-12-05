@@ -27,8 +27,6 @@ def save_user_profile(sender, instance, **kwargs):
 
 class Category(models.Model):
     title = models.CharField(max_length=300)
-    created_at = models.DateTimeField(default=timezone.now)
-
     def __str__(self):
         return self.title
 
@@ -47,7 +45,8 @@ class Task(models.Model):
     flag = models.CharField(max_length=150)
     describtion = models.CharField(max_length=1000)
     file = models.FileField(upload_to="files/", null=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="tasks")
+
 
     def __str__(self):
         return self.title

@@ -5,7 +5,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.settings import api_settings
 from django.contrib.auth.models import update_last_login
 from django.core.exceptions import ObjectDoesNotExist
-from .models import Task
+from .models import Task, Category
 from django.contrib.auth.models import User
 
 
@@ -15,11 +15,25 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = ("__all__")
+        extra_kwargs = {"author": {"read_only": True}}
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ("__all__")
+
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("__all__")
+        fields = ["id", "username", "password"]
+        extra_kwargs = {"password": {"write_only": True}}
+
+    def create(self, validated_data):
+        print(validated_data)
+        user = User.objects.create_user(**validated_data)
+        return user
         
 class LoginSerializer(TokenObtainPairSerializer):
 

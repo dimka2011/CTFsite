@@ -11,6 +11,7 @@ from pytils.translit import slugify
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
+from rest_framework_simplejwt.authentication import JWTAuthentication, JWTStatelessUserAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
@@ -24,7 +25,7 @@ from .forms import UserRegisterForm, FlagForm, ProfileForm, UserForm
 from rest_framework import generics, viewsets
 import asyncio
 from .forms import TaskForm
-from .serializers import TaskSerializer, UserSerializer, LoginSerializer, RegisterSerializer
+from .serializers import TaskSerializer, UserSerializer, CategorySerializer
 from django import forms
 from django.urls import reverse
 from django.contrib import auth
@@ -41,12 +42,18 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 
+
+class CreateUserView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    authentication_classes = ()
+    serializer_class = UserSerializer
+    permission_classes = [AllowAny]
 class UserViewSet(viewsets.ModelViewSet):
     http_method_names = ['get']
     serializer_class = UserSerializer
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = [IsAuthenticated]
     filter_backends = [filters.OrderingFilter]
-
+    authentication_classes = [JWTAuthentication, JWTStatelessUserAuthentication]
     def get_queryset(self):
         if self.request.user.is_superuser:
             return User.objects.all()
@@ -60,75 +67,32 @@ class UserViewSet(viewsets.ModelViewSet):
         return obj
 
 
-class TaskAPIList(generics.ListCreateAPIView):
-    queryset = Task.objects.all()
+class TaskListCreate(generics.ListCreateAPIView):
+    authentication_classes = [JWTAuthentication]
     serializer_class = TaskSerializer
+    permission_classes = (IsAuthenticated, )
+    def get_queryset(self):
+        user = self.request.user
+        return Task.objects.filter(author=user)
 
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            serializer.save(author=self.request.user)
+        else:
+            print(serializer.errors)
 
-class TaskAPIUpdate(generics.RetrieveUpdateAPIView):
-    queryset = Task.objects.all()
+class CategoryList(generics.ListAPIView):
+    serializer_class = CategorySerializer
+    def get_queryset(self):
+        return Category.objects.all()
+
+class TaskDelete(generics.DestroyAPIView):
     serializer_class = TaskSerializer
-    permission_classes = (IsOwnerOrReadOnly, )
+    permission_classes = [IsAuthenticated]
 
-
-class TaskAPIDestroy(generics.RetrieveDestroyAPIView):
-    queryset = Task.objects.all()
-    serializer_class = TaskSerializer
-    permission_classes = (IsAdminOrReadOnly,)
-
-
-class LoginViewSet(ModelViewSet, TokenObtainPairView):
-    serializer_class = LoginSerializer
-    permission_classes = (AllowAny,)
-    http_method_names = ['post']
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-
-        try:
-            serializer.is_valid(raise_exception=True)
-        except TokenError as e:
-            raise InvalidToken(e.args[0])
-
-        return Response(serializer.validated_data, status=status.HTTP_200_OK)
-
-
-class RegistrationViewSet(ModelViewSet, TokenObtainPairView):
-    serializer_class = RegisterSerializer
-    permission_classes = (AllowAny,)
-    http_method_names = ['post']
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()
-        refresh = RefreshToken.for_user(user)
-        res = {
-            "refresh": str(refresh),
-            "access": str(refresh.access_token),
-        }
-
-        return Response({
-            "user": serializer.data,
-            "refresh": res["refresh"],
-            "token": res["access"]
-        }, status=status.HTTP_201_CREATED)
-
-
-class RefreshViewSet(viewsets.ViewSet, TokenRefreshView):
-    permission_classes = (AllowAny,)
-    http_method_names = ['post']
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-
-        try:
-            serializer.is_valid(raise_exception=True)
-        except TokenError as e:
-            raise InvalidToken(e.args[0])
-
-        return Response(serializer.validated_data, status=status.HTTP_200_OK)
+    def get_queryset(self):
+        user = self.request.user
+        return Task.objects.filter(author=user)
 
 
 class UserRegisterView(CreateView):
