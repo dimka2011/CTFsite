@@ -1,8 +1,0 @@
-{% extends "base.html" %}
-
-{% block content %}
-  <p>Logged out!</p>
-  {% csrf_token %}
-  <a href="{% url 'login'%}">Click here to login again.</a>
-  <a href="{% url "CTF:signup" %}">Click here to sign up.</a>
-{% endblock %}
