@@ -1,13 +1,22 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
 from users import models
-from rest_framework import generics
+from rest_framework import generics 
 from .serializers import *
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny # type: ignore
 from .models import Task, Category
 
 
-class TaskListCreate(generics.ListCreateAPIView):
-    serializer_class = TaskSerializer
+class TaskList(generics.ListAPIView):
+    serializer_class = TaskListSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Task.objects.all()
+
+
+class TaskCreate(generics.CreateAPIView):
+    serializer_class = TaskCreateSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
@@ -27,7 +36,7 @@ class CategoryList(generics.ListAPIView):
         return Category.objects.all()
 
 class TaskDelete(generics.DestroyAPIView):
-    serializer_class = TaskSerializer
+    serializer_class = TaskListSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
@@ -56,9 +65,36 @@ class CreateUserView(generics.CreateAPIView):
     permission_classes = [AllowAny]
 
 class OneTask(generics.ListAPIView):
-    serializer_class = TaskSerializer
+    serializer_class = TaskListSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         print(self.request.path[-2])
         return Task.objects.filter(pk=self.request.path[-2])
+
+def appendWins(user, task_id):
+    user.win_list = str(user.win_list) + "," + str(task_id)
+    user.save()
+    print(user.win_list)
+
+
+class CheckFlag(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]   
+    def get(self, request):
+        task_id = request.GET.get('task_id')
+        user_flag = request.GET.get('flag')
+        user = request.user
+        user_wins = user.win_list.split(",")
+        if task_id not in user_wins:
+            try:
+                task_flag = Task.objects.get(id=task_id)
+                print(task_id, user_flag, task_flag.flag)
+                if user_flag==task_flag.flag:
+                    appendWins(user, task_id)
+                    return HttpResponse("Good", content_type='application/json')
+                else:
+                    return HttpResponse("Bad", content_type='application/json')
+            except ValueError:
+                return HttpResponse("Not found", content_type='application/json')
+        else:
+            return HttpResponse("Done", content_type='application/json')

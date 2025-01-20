@@ -7,9 +7,14 @@ function Task({ task, onDelete }) {
 
     return (
         <div className="task-container">
-            <p className="task-title">{task.title}</p>
-            <p className="task-content">{task.content}</p>
-            <p className="task-date">{formattedDate}</p>
+            <div className="data-container">
+                <p className="task-title">{task.title}</p>
+                <p className="task-content">{task.content}</p>
+                <p className="task-date">{formattedDate}</p>
+            </div>
+            <div className="link-container">
+                <a href={task.id} className="task-link">Try</a>
+            </div>
         </div>
     );
 }

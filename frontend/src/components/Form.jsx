@@ -58,7 +58,37 @@ function Form({ route, method }) {
             <button className="form-button" type="submit">
                 {name}
             </button>
+            <h4 align="center">Ещё нет аккаунта? <a href="/register">Зарегестрироваться</a></h4>
         </form>
+        // <div class="form-container">
+        // <p class="title">{name}</p>
+        // <form class="form">
+        //     <div class="input-group">
+        //         <label for="username">Username</label>
+        //         <input type="text" 
+        //         name="username" 
+        //         id="username" 
+        //         value={username}
+        //         onChange={(e) => setUsername(e.target.value)}
+        //         placeholder="Username"
+        //         required />
+        //     </div>
+        //     <div class="input-group">
+        //         <label for="password">Password</label>
+        //         <input type="password" 
+        //         name="password" 
+        //         id="password" 
+        //         value={password}
+        //         onChange={(e) => setPassword(e.target.value)}
+        //         placeholder="Password"
+        //         required />
+        //         <div class="forgot">
+        //             <a rel="noopener noreferrer" href="#">Forgot Password ?</a>
+        //         </div>
+        //     </div>
+        //     <button class="sign">{name}</button>
+        // </form>
+        // </div>
     );
 }
 

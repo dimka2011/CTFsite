@@ -1,30 +1,47 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import api from "../api";
 import ProtectedRoute from "../components/ProtectedRoute";
+import Select from 'react-select'
+import countryList from 'react-select-country-list'
+// import CountryDropdown from 'react-country-region-selector'
 
 function UserProfile(){
     const [user, setUser] = useState([])
     const [bio, setBio] = useState("")
-    const [birthDate, setBirthDate] = useState("")
+    const [birth_date, setBirth_date] = useState("")
+    const [first_name, setFirst_name] = useState("")
+    const [last_name, setLast_name] = useState("")
+    const [location, setLocation] = useState("")
+    const [email, setEmail] = useState("")
+    // const options = useMemo(() => countryList().getData(), [])
     useEffect(() => {
         getUser();
     }, []);
     const updateUser = (e) => {
         e.preventDefault();
         api
-            .put("api/user/update/", { bio, birthDate })
+            .put("api/user/update/", { bio, birth_date, first_name, last_name, location, email })
             .then((res) => {
                 if (res.status === 200) alert("Successfully updated");
                 else alert("Failed to update.");
             })
             .catch((err) => alert(err));
     };
+    // const changeLocation = value => {
+    //     setLocation(value)
+    //   }
     const getUser = () => {
         api
             .get("/api/user/")
             .then((res) => res.data)
             .then((data) => {
                 setUser(data);
+                setBio(data.bio)
+                setBirth_date(data.birth_date)
+                setEmail(data.email)
+                setFirst_name(data.first_name)
+                setLast_name(data.last_name)
+                setLocation(data.location)
                 console.log(data);
             })
             .catch((err) => alert(err));
@@ -33,10 +50,10 @@ function UserProfile(){
     return(
         <ProtectedRoute>
             <div>
-                <h2>User</h2>
+                <h2>Профиль</h2>
                 {user.map(us => (
                 <div>
-                <p key={us.id}>{us.username}</p>
+                <p key={us.id}>Username: {us.username}, wins: {us.win_list.split(',').length - 1}</p>
                  
                 <form onSubmit={updateUser}>
                 <label htmlFor="bio">Биография:</label>
@@ -49,17 +66,59 @@ function UserProfile(){
                     onChange={(e) => setBio(e.target.value)}
                 />
                 <br />
-                <label htmlFor="birthDate">Дата рождения</label>
+                <label htmlFor="birth_date">Дата рождения</label>
                 <br />
                 <input
                     type="date"
                     id="birth_date"
                     name="birth_date"
                     defaultValue={us.birth_date}
-                    onChange={(e) => setBirthDate(e.target.value)}
+                    onChange={(e) => setBirth_date(e.target.value)}
                 />
                 <br />
-                <input type="submit" value="Submit"></input>
+                <label htmlFor="email">Почта</label>
+                <br />
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    defaultValue={us.email}
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+                <br />
+                <label htmlFor="first_name">Имя</label>
+                <br />
+                <input
+                    type="text"
+                    id="first_name"
+                    name="first_name"
+                    defaultValue={us.first_name}
+                    onChange={(e) => setFirst_name(e.target.value)}
+                />
+                <br />
+                <label htmlFor="last_name">Фамилия</label>
+                <br />
+                <input
+                    type="text"
+                    id="last_name"
+                    name="last_name"
+                    defaultValue={us.last_name}
+                    onChange={(e) => setLast_name(e.target.value)}
+                />
+                <br />
+                {/* <label htmlFor="last_name">Город</label>
+                <br />
+                <Select
+                    id="location"
+                    name="location"
+                    options={options}
+                    value={location} 
+                    onChange={changeLocation} />
+                <br />
+                <CountryDropdown
+                value={location}
+                onChange={(value) => changeLocation(value)} /> */}
+                <input type="submit" value="Submit" />
                 </form>
                 </div>
             ))}</div>

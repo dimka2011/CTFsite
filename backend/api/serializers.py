@@ -15,7 +15,10 @@ class UserSerializer(serializers.ModelSerializer):
         print(validated_data)
         user = User.objects.create_user(**validated_data)
         return user
-
+class TaskCheckSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = ["id", "flag"]
 
 class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,6 +27,11 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         
     def update(self, instance, validated_data):
         instance.bio = validated_data.get("bio", instance.bio)
+        instance.birth_date = validated_data.get("birth_date", instance.birth_date)
+        instance.location = validated_data.get("location", instance.location)
+        instance.first_name = validated_data.get("first_name", instance.first_name)
+        instance.last_name = validated_data.get("last_name", instance.last_name)
+        instance.email = validated_data.get("email", instance.email)
         instance.save()
         return instance
 # class ProfileSerializer(serializers.ModelSerializer):
@@ -31,10 +39,16 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 #         model = Profile
 #         fields = ("__all__")
 
-class TaskSerializer(serializers.ModelSerializer):
+class TaskCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = ["id", "title", "content", "flag", "category", "created_at", "author"]
+        fields = ["id", "title", "content", "category", "created_at", "author", "flag"]
+        extra_kwargs = {"author": {"read_only": True}}
+
+class TaskListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = ["id", "title", "content", "category", "created_at", "author"]
         extra_kwargs = {"author": {"read_only": True}}
 
 class CategorySerializer(serializers.ModelSerializer):

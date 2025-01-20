@@ -1,0 +1,4 @@
+[data-bs-theme="dark"] {
+    --bs-tertiary-bg-rgb: to-rgb(17, 24, 39);
+    
+}
