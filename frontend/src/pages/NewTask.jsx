@@ -9,7 +9,7 @@ function NewTask() {
     const [content, setContent] = useState("")
     const [category, setCategory] = useState("")
     const [flag, setFlag] = useState("")
-    const createTask = () => {
+    const createTask = (e) => {
       e.preventDefault();
       api
             .post("/api/tasks/create/", {title, content, category, flag})
@@ -35,7 +35,7 @@ function NewTask() {
             onChange={(e) => setTitle(e.target.value)}
             />
             <br />
-            <label htmlFor="form-describption">Phone</label>
+            <label htmlFor="form-describption">Describtion</label>
             <br />
             <input placeholder="Describtion" 
             id="form-describption" 
@@ -59,7 +59,7 @@ function NewTask() {
             />
             <br />
             </div>
-          <button className="sign">Submit</button>
+            <input type="submit" value="Submit" />
         </form>
       </div>
     </div>
