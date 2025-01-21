@@ -22,7 +22,8 @@ function SingleTask(){
             })
             .catch((err) => alert(err));
     };
-    const checkTasks = () => {
+    const checkTasks = (e) => {
+        e.preventDefault();
         api
             .get("api/tasks/check/?task_id=" + pk + "&flag=" + flag)
             .then((res) => res.data)
