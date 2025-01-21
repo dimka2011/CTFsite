@@ -10,11 +10,12 @@ function NewTask() {
     const [category, setCategory] = useState("")
     const [flag, setFlag] = useState("")
     const createTask = () => {
+      e.preventDefault();
       api
             .post("/api/tasks/create/", {title, content, category, flag})
             .then((res) => res.data)
             .then((data) => {
-              alert(Success)
+              alert("Success")
             })
             .catch((err) => alert(err));
 
