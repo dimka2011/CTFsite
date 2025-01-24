@@ -28,7 +28,6 @@ function SingleTask(){
             .get("api/tasks/check/?task_id=" + pk + "&flag=" + flag)
             .then((res) => res.data)
             .then((data) => {
-                setFlag(data);
                 alert(data);
             })
             .catch((err) => alert(err));
@@ -53,7 +52,7 @@ function SingleTask(){
                 required
                 />
                 <br />
-                <input type="submit" value="Submit"></input>
+                <input type="submit" value="Проверить"></input>
                 </form>
             </div>)}
 

@@ -69,8 +69,8 @@ class OneTask(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        print(self.request.path[-2])
-        return Task.objects.filter(pk=self.request.path[-2])
+        print(self.request.build_absolute_uri().strip("/").split("/")[-1])
+        return Task.objects.filter(pk=self.request.build_absolute_uri().strip("/").split("/")[-1])
 
 def appendWins(user, task_id):
     user.win_list = str(user.win_list) + "," + str(task_id)
