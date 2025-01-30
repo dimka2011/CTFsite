@@ -22,7 +22,7 @@ function NewTask() {
     }
     return(
       <ProtectedRoute>
-        <div>
+        <div  className="main-root">
         <div className="form-containerr">
         <p className="title">Create new task</p>
         <form onSubmit={createTask}>

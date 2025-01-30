@@ -51,6 +51,14 @@ class UserView(generics.ListAPIView):
         user = models.User.objects.filter(id=self.request.user.id)
         return user
 
+class UsersView(generics.ListAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = models.User.objects.all()
+        return user
+
 class UpdateUserView(generics.RetrieveUpdateAPIView):
     serializer_class = UserUpdateSerializer
     queryset = models.User.objects.all()

@@ -58,7 +58,7 @@ function Form({ route, method }) {
             <button className="form-button" type="submit">
                 {name}
             </button>
-            <h4 align="center">Ещё нет аккаунта? <a href="/register">Зарегестрироваться</a></h4>
+
         </form>
         // <div class="form-container">
         // <p class="title">{name}</p>

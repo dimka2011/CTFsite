@@ -11,4 +11,5 @@ urlpatterns = [
     path("api/", include("api.urls")),
     path("api/user/", UserView.as_view(), name="user"),
     path("api/user/update/", UpdateUserView.as_view(), name="user_update"),
+    path("api/users/", UsersView.as_view(), name="users"),
 ]

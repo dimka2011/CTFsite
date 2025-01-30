@@ -36,7 +36,7 @@ function SingleTask(){
     return(
         <ProtectedRoute>
             {tasks.map(task=>
-            <div>            
+            <div  className="main-root">            
                 <h2>Задание</h2>
                 <p key={task.id}>Название: {task.title}</p>
                 <p key={task.id}>Описание: {task.content}</p>

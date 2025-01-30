@@ -23,18 +23,31 @@
 
   }
 
-  .task-link {
+  .task-link-done {
     color: #333;
-    text-decoration: none
+    text-decoration: none;
+    font-size: x-large;
+    transition: 0.5s;
+  }
+  .task-link-done:hover {
+    transform: scale(1.5);
+    color: green;
+  }
+  .task-link-try {
+    color: #333;
+    text-decoration: none;
+    font-size: x-large;
+    transition: 0.5s;
+  }
+  .task-link-try:hover {
+    transform: scale(1.5);
+    color: red
   }
   .link-container {
     float:right;
   }
   
-  .task-link:hover {
-    font-size: larger;
-    color: green;
-  }
+
   .delete-button {
     background-color: #f44336; /* Red */
     color: white;

@@ -49,7 +49,7 @@ function UserProfile(){
 
     return(
         <ProtectedRoute>
-            <div>
+            <div className="main-root">
                 <h2>Профиль</h2>
                 {user.map(us => (
                 <div>
