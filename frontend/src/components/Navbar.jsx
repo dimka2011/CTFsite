@@ -34,7 +34,7 @@ function Navigation(){
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/">Домой</Nav.Link>
-            <Nav.Link href="/leaders">Лидеры</Nav.Link>
+            {/* <Nav.Link href="/leaders">Лидеры</Nav.Link> */}
             {user.map(us => us.username=='Login'?
             <Nav.Link href="/login">Войти</Nav.Link> : <NavDropdown title=<b key={us.id}>{us.username}</b> id="basic-nav-dropdown">
               <NavDropdown.Item href="/profile">Профиль</NavDropdown.Item>

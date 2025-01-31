@@ -42,7 +42,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 class TaskCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = ["id", "title", "content", "category", "created_at", "author", "flag"]
+        fields = ["id", "title", "content", "created_at", "author", "flag"]
         extra_kwargs = {"author": {"read_only": True}}
 
 class TaskListSerializer(serializers.ModelSerializer):
