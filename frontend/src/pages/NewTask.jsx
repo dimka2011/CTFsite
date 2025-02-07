@@ -33,6 +33,7 @@ function NewTask() {
             id="form-title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            required
             />
             <br />
             <label htmlFor="form-describption">Describtion</label>
@@ -41,6 +42,7 @@ function NewTask() {
             id="form-describption" 
             value={content}
             onChange={(e) => setContent(e.target.value)}
+            required
             />
             <br />
             <label htmlFor="category">Category</label>
@@ -48,7 +50,9 @@ function NewTask() {
             <input placeholder="Category" 
             id="category" 
             value={category}
-            onChange={(e) => setCategory(e.target.value)}/>
+            onChange={(e) => setCategory(e.target.value)}
+            required
+            />
             <br />
             <label htmlFor="flag">Flag</label>
             <br />
@@ -56,6 +60,7 @@ function NewTask() {
             id="flag" 
             value={flag}
             onChange={(e) => setFlag(e.target.value)}
+            required
             />
             <br />
             </div>

@@ -26,6 +26,9 @@ class TaskCreate(generics.CreateAPIView):
     def perform_create(self, serializer):
         if serializer.is_valid():
             serializer.save(author=self.request.user)
+            user = self.request.user
+            user.win_list = user.win_list + "," + str(serializer.instance.id)
+            user.save()
         else:
             print(serializer.errors)
 

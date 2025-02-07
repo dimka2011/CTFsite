@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
-import api from "../api";
 import { useParams } from "react-router-dom"
 import ProtectedRoute from "../components/ProtectedRoute";
-
+import api from "../api";
 
 function SingleTask(){
     const [tasks, setTasks] = useState([])
     const [flag, setFlag] = useState("")
     const { pk } = useParams()
+    var error = document.getElementById('error')
+    
     useEffect(() => {
         getTasks();
     }, []);
-
     const getTasks = () => {
         api
             .get("/api/tasks/"+String(pk) + "/")
@@ -22,16 +22,36 @@ function SingleTask(){
             })
             .catch((err) => alert(err));
     };
+    const errorMessage = (message) => {
+        if (message == "Done") {
+            error.textContent = "Вы уже сделали это задание!"
+            error.style.color = "green"
+        }
+        else if (message == "Bad") {
+            error.textContent = "Пока не правильно, попробуйте ещё раз :("
+            error.style.color = "red"
+        }
+        else if (message == "Good") {
+            error.textContent = "Поздравляем, Вы прошли это задание!"
+            error.style.color = "green"
+        }
+        else {
+            error.textContent = "Произошла какая-то ошибка ("
+            error.style.color = "red"
+        }
+    }
     const checkTasks = (e) => {
         e.preventDefault();
         api
             .get("api/tasks/check/?task_id=" + pk + "&flag=" + flag)
             .then((res) => res.data)
             .then((data) => {
-                alert(data);
+                errorMessage(data)
+                
             })
             .catch((err) => alert(err));
     }
+    
 
     return(
         <ProtectedRoute>
@@ -52,6 +72,7 @@ function SingleTask(){
                 required
                 />
                 <br />
+                <span id="error"></span><br/>
                 <input type="submit" value="Проверить"></input>
                 </form>
             </div>)}

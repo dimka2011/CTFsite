@@ -1,9 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import api from "../api";
 import ProtectedRoute from "../components/ProtectedRoute";
-import Select from 'react-select'
-import countryList from 'react-select-country-list'
-// import CountryDropdown from 'react-country-region-selector'
 
 function UserProfile(){
     const [user, setUser] = useState([])
@@ -27,9 +24,6 @@ function UserProfile(){
             })
             .catch((err) => alert(err));
     };
-    // const changeLocation = value => {
-    //     setLocation(value)
-    //   }
     const getUser = () => {
         api
             .get("/api/user/")
