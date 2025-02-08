@@ -13,7 +13,7 @@ function Task({ task, done, onDelete }) {
                 <p className="task-date">{formattedDate}</p>
             </div>
             <div className="link-container">
-            {done == true ? (<a href={task.id} className="task-link-done">Сделанно</a>) : (<a href={task.id} className="task-link-try">Выполнить</a>) }
+            {done == true ? (<a href={task.id} className="task-link-done">Сделано</a>) : (<a href={task.id} className="task-link-try">Выполнить</a>) }
                 
             </div>
         </div>
