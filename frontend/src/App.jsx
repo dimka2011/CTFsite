@@ -27,7 +27,7 @@ function RegisterAndLogout() {
 function App() {
   return (
     <div>
-    <BrowserRouter>
+    <BrowserRouter basename="/ctfsite">
       <Routes>
         <Route
           path="/"
